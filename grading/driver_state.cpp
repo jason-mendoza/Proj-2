@@ -43,13 +43,13 @@ void render(driver_state& state, render_type type)
 		for(int q = 0; q < 3; q++){
 			three[q] = new data_geometry;
 		}
-		for(int q  = 0; q < 2; q++){
+		for(int q  = 0; q < 3; q++){
 			const_cast<data_geometry*>(three[q])->data = new float[MAX_FLOATS_PER_VERTEX];
 		}
 		for(int j = 0; j < state.floats_per_vertex; j++){
-			three[0] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * i)];
-			three[1] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 1))];
-			three[2] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 2))];
+			three[0]->data[j] = state.vertex_data[j + (state.floats_per_vertex * i)];
+			three[1]->data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 1))];
+			three[2]->data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 2))];
 		}
 		rasterize_triangle(state,three);
 		delete[] three[0] -> data; delete[] three[1] -> data; delete[] three[2]->data;
