@@ -38,7 +38,24 @@ void initialize_render(driver_state& state, int width, int height)
 void render(driver_state& state, render_type type)
 {
 
-    vec4 single_vertex(0.0);
+	for(int i = 0; i < state.num_vertices; i +=3){
+		const data_geometry ** three = new const data_geometry*[3];
+		for(int q = 0; q < 3; q++){
+			three[q] = new data_geometry;
+		}
+		for(int q  = 0; q < 2; q++){
+			const_cast<data_geometry*>(three[q])->data = new float[MAX_FLOATS_PER_VERTEX];
+		}
+		for(int j = 0; j < state.floats_per_vertex; j++){
+			three[0] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * i)];
+			three[1] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 1))];
+			three[2] -> data[j] = state.vertex_data[j + (state.floats_per_vertex * (i + 2))];
+		}
+		rasterize_triangle(state,three);
+		delete[] three[0] -> data; delete[] three[1] -> data; delete[] three[2]->data;
+		delete three[0]; delete three[1]; delete three[2]; delete[] three;
+	}
+/*
     int q  = 0;
     data_geometry * in[3] = {0,0,0};
     float * data_temp = 0;
@@ -64,6 +81,7 @@ void render(driver_state& state, render_type type)
 	}	
 	
     }
+*/
     
 }
 
