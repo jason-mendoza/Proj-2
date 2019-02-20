@@ -38,6 +38,7 @@ void initialize_render(driver_state& state, int width, int height)
 void render(driver_state& state, render_type type)
 {
 
+    vec4 single_vertex(0.0);
     int q  = 0;
     data_geometry * in[3] = {0,0,0};
     float * data_temp = 0;
