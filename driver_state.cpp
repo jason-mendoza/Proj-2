@@ -153,7 +153,7 @@ void rasterize_triangle(driver_state& state, const data_geometry* in[3])
     for(int px = 0; px < width; px++){
     	for(int py = 0; py < height; py++){
 		AreaPBC = 0.5 * (( (bx * cy) - (cx * by) ) + ((by-cy) * px) + ((cx -bx) * py));
-		AreaAPC = 0.5 * ( ((ax * cy) - (cx * ay)) + ((cy - ay) * px) + ((ax - cx) * py) );  
+		AreaAPC = 0.5 * ( ((cx * ay) - (ax * cy)) + ((cy - ay) * px) + ((ax - cx) * py) );  
 		AreaABP = 0.5 * ( ((ax * by) - (bx*ay)) + ((ay-by)*px) + ((bx-ax)*py));
 		
 		alpha = AreaPBC /  AreaABC;
