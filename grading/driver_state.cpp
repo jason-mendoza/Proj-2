@@ -23,7 +23,7 @@ void initialize_render(driver_state& state, int width, int height)
     int length = height * width;
     for(int i = 0; i < length; i++){
 	state.image_color[i] = make_pixel(0,0,0); 
-	state.image_depth[i] = 2;
+	state.image_depth[i] = 1;
     }
     //std::cout<<"TODO: allocate and initialize state.image_color and state.image_depth."<<std::endl;
 }
@@ -60,9 +60,9 @@ void render(driver_state& state, render_type type)
 			state.vertex_shader((const data_vertex)temp,*three[j], state.uniform_data);
 		}
 		//std::cout << three[0] -> data[0] << std::endl;
-		//for(int p = 0; p < 3; p++){
-		//	three[p]->gl_Position /= three[p]->gl_Position[3];
-		//}
+		for(int p = 0; p < 3; p++){
+			three[p]->gl_Position /= three[p]->gl_Position[3];
+		}
 		rasterize_triangle(state, (const data_geometry **) three);
 		delete[] three[0] -> data; delete[] three[1] -> data; delete[] three[2]->data;
 		delete three[0]; delete three[1]; delete three[2]; delete[] three;
@@ -184,10 +184,9 @@ void rasterize_triangle(driver_state& state, const data_geometry* in[3])
 			data_output frag_out;
 
 			float depth1 = alpha * in[0]->gl_Position[2] + beta * in[1]->gl_Position[2] + gamma * in[2]->gl_Position[2];
-			if(depth1 > state.image_depth[px + py * width]){
+			if(depth1 > state.image_depth[px + py * width]){	
 				continue;
 			}
-
 			for(int q = 0; q < state.floats_per_vertex; q++){
 				float k_gour;
 				switch(state.interp_rules[q]){
@@ -213,12 +212,14 @@ void rasterize_triangle(driver_state& state, const data_geometry* in[3])
 					break;						
 				}
 			}
+		
 			state.fragment_shader( f, frag_out, state.uniform_data );
 			state.image_color[px + py * width] = make_pixel(frag_out.output_color[0] * 255,
 								 frag_out.output_color[1] * 255,
 								 frag_out.output_color[2] * 255);
 			state.image_depth[px + py * width] = depth1;
-		} 
+		
+	    } 
 	}
     }
 
